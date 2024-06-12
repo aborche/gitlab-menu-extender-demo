@@ -1,0 +1,117 @@
+<div class="">
+<div class="gl-md-display-flex gl-min-w-0 gl-flex-grow-1 gl-border-t-none row-content-block gl-bg-none">
+    <div role="group" class="input-group gl-search-box-by-click flex-grow-1 gl-search-box-by-click-with-search-button">
+        <div class="gl-filtered-search-scrollable-container">
+            <div class="gl-filtered-search-scrollable">
+                <div class="gl-h-auto">
+                    <div class="">
+                        <input size="100" id="search_users" name="search_users" class="gl-filtered-search-term-input" placeholder="Введите строку для поиска" title="Поиск без параметров ограничен первыми 20 элементами. Используйте &quot;*&quot; для отключения лимита, либо введите строку поиска для расширения списка">
+                    </div>
+                </div>
+            </div>
+        </div> <!---->
+        <button name="clear" title="Clear" aria-label="Clear" type="button" onclick="clear_search_data();"
+                class="btn gl-clear-icon-button gl-search-box-by-click-clear-button btn-default btn-sm gl-button btn-default-tertiary btn-icon">
+            <svg data-testid="clear-icon" role="img" aria-hidden="true" class="gl-button-icon gl-icon s16">
+                <use href="{{ getIconsBundle }}#clear"></use>
+            </svg>
+        </button>
+        <div class="input-group-append">
+            <button aria-label="Search" data-testid="search-button" type="button" onclick="submit_search_data();"
+                    class="btn gl-search-box-by-click-search-button btn-default btn-md gl-button btn-icon">
+                <svg data-testid="search-icon" role="img" aria-hidden="true" class="gl-button-icon gl-icon s16">
+                    <use href="{{ getIconsBundle }}#search"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function fillSearchData() {
+        let searchParams = new URLSearchParams(window.location.search)
+        let searchField = document.getElementById("search_users");
+        searchField.value = localStorage.getItem("search_users");
+        if (!searchParams.has("search") && searchField.value.length > 0)
+        {
+            const params = new URLSearchParams({ "search": searchField.value })
+            document.location.href = window.location.href + `?${params}`;
+        }
+        searchField.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                submit_search_data();
+            }
+        });
+    }
+
+    function clear_search_data() {
+        document.getElementById("search_users").value = "";
+        localStorage.setItem("search_users", "");
+        submit_search_data();
+    }
+
+    function submit_search_data() {
+        let data=document.getElementById("search_users").value.toLowerCase();
+        let form="";
+        if (data.length === 0) {
+            console.log("Empty string. Reset URL.");
+            window.location.href=window.location.href.split('?')[0];
+        } else {
+            localStorage.setItem("search_users", data);
+            form = $('<form method="GET">');
+            form.append('<input name="search" value="' + data + '" />');
+            form.appendTo($('body')).submit();
+        }
+    }
+    document.onload = fillSearchData();
+</script>
+
+<div class="table-holder bordered-box">
+    <table class="table tree-table gl-table-layout-fixed border-1">
+        <thead>
+        <tr>
+            <th scope="col" class="gl-w-5p border-right">User ID</th>
+            <th scope="col" class="gl-w-15p border-right">User Name</th>
+            <th scope="col" class="gl-w-30p border-right">User FullName</th>
+            <th scope="col" class="gl-w-50p">Groups and Projects</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{ range .tbl }}
+            <tr class="tree-item">
+                <td class="tree-item border-right">{{ cutId .Id }}</td>
+                <td class="border-right">{{ .UserName }}</td>
+                <td class="border-right ">
+                <span
+                    {{ if ne .State "active" }}
+                    class="gl-pr-2 gl-text-red-600 gl-hover-text-white"
+                    style="text-decoration:line-through"
+                    {{ else }}
+                    class="gl-pr-2"
+                    {{ end }}>
+                    <a class="{{ if .Bot }} gl-text-orange-400 {{ end }} {{ if ne .State "active" }} gl-text-red-600 {{ end }}" href="/admin/users/{{ .UserName }}">{{ .Name }}{{ if .Bot }} (bot){{ end }}</a></span><span class="gl-text-red-600">{{ if ne .State "active" }}[ {{ .State }} ] {{ end }}</span><br>
+                    </td>
+                <td>
+                    {{ if .ProjectMemberships.Nodes }}
+                    <ul class="gl-p-2 gl-m-2"><span class="gl-button gl-w-full gl-mb-2">Projects</span>
+                    {{ range .ProjectMemberships.Nodes }}
+                    <li>[ {{ .AccessLevel.StringValue }} ] <a href="/{{ .Project.FullPath }}">{{ .Project.NameWithNamespace }}</a></li>
+                    {{ end }}
+                    </ul>
+                    {{ end }}
+                    {{ if .GroupMemberships.Nodes }}
+                    <ul class="gl-p-2 gl-m-2"><span class="gl-button gl-w-full gl-mb-2">Groups</span>
+                        {{ range .GroupMemberships.Nodes }}
+                        <li>[ {{ .AccessLevel.StringValue }} ] <a href="/{{ .Group.FullPath }}">{{ .Group.FullName }}</a></li>
+                        {{ end }}
+                    </ul>
+                    {{ end }}
+
+                </td>
+            </tr>
+        {{ end }}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,44 @@
+[
+  {
+    "avatar": null,
+    "entity_id": null,
+    "icon": "go-back",
+    "id": "back",
+    "link": "/",
+    "link_classes": null,
+    "pill_count": null,
+    "title": "Back to Gitlab"
+  },
+  {
+    "avatar": null,
+    "entity_id": null,
+    "icon": "information-o",
+    "id": "helper",
+    "link": "/-/helper/",
+    "link_classes": null,
+    "pill_count": null,
+    "title": "Helper Information"
+  },
+  {
+    "avatar": null,
+    "entity_id": null,
+    "icon": "requirements",
+    "id": "projects",
+    "link": "/-/helper/projects",
+    "link_classes": "show",
+    "pill_count": null,
+    "title": "Projects Audit (GraphQL)",
+    "is_active": false
+  },
+  {
+    "avatar": null,
+    "entity_id": null,
+    "icon": "users",
+    "id": "users",
+    "link": "/-/helper/users",
+    "link_classes": "",
+    "pill_count": null,
+    "title": "Users Audit (GraphQL)",
+    "is_active": false
+  }
+]

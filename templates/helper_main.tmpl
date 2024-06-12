@@ -1,0 +1,247 @@
+<div class="">
+
+    <div class="gl-md-display-flex gl-min-w-0 gl-flex-grow-1 gl-border-t-none row-content-block gl-bg-none">
+        <div role="group" class="input-group gl-search-box-by-click flex-grow-1 gl-search-box-by-click-with-search-button">
+            <div class="gl-filtered-search-scrollable-container">
+                <div class="gl-filtered-search-scrollable">
+                    <div class="gl-h-auto">
+                        <div class="">
+                            <input size="100" id="search_data" name="search_data" class="gl-filtered-search-term-input" title="Поиск">
+                        </div>
+                    </div>
+                </div>
+            </div> <!---->
+            <button name="clear" title="Clear" aria-label="Clear" type="button" onclick="clear_search_data();"
+                    class="btn gl-clear-icon-button gl-search-box-by-click-clear-button btn-default btn-sm gl-button btn-default-tertiary btn-icon">
+                <svg data-testid="clear-icon" role="img" aria-hidden="true" class="gl-button-icon gl-icon s16">
+                    <use href="{{ getIconsBundle }}#clear"></use>
+                </svg>
+            </button>
+            <div class="input-group-append">
+                <button aria-label="Search" data-testid="search-button" type="button" onclick="submit_search_data();"
+                        class="btn gl-search-box-by-click-search-button btn-default btn-md gl-button btn-icon">
+                    <svg data-testid="search-icon" role="img" aria-hidden="true" class="gl-button-icon gl-icon s16">
+                        <use href="{{ getIconsBundle }}#search"></use>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="userinfo" data-userinfo="{{ .UserInfoJSON }}">
+    <table class="table tree-table gl-table-layout-fixed border-1">
+        <thead>
+        <tr>
+            <th class="gl-w-60p">Render type</th>
+            <th class="gl-w-40p">Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Prerendered html.Template variable from Map struct<BR>
+                <pre class="gl-mt-2 gl-p-5">&lt;td&gt;
+UserInfoMap.Name = &lcub;&lcub; .UserInfoMap.Name &rcub;&rcub;<BR>UserInfoMap.Email = &lcub;&lcub; .UserInfoMap.Email &rcub;&rcub;
+&lt;/td&gt;</pre>
+            </td>
+            <td>
+                UserInfoMap.Name = {{ .UserInfoMap.Name }}<BR>
+                UserInfoMap.Email = {{ .UserInfoMap.Email }}
+            </td>
+        </tr>
+        <tr><td><BR></td><td></td></tr>
+        <tr>
+            <td>Prerendered html.Template variable from gon Map struct<BR>
+                <pre class="gl-mt-2 gl-p-5">&lt;td&gt;
+gon.current_user_fullname = &lcub;&lcub; .gon.current_user_fullname &rcub;&rcub;
+&lt;/td&gt;</pre>
+            </td>
+            <td>gon.current_user_fullname = {{ .gon.current_user_fullname }}</td>
+        </tr>
+        <tr><td><BR></td><td></td></tr>
+        <tr>
+            <td>Prerendered html.Template image with gon.sprite_icons github icon 48x48<BR>
+                <pre class="gl-mt-2 gl-p-5">&lt;td&gt;
+    &lt;svg role="img" aria-hidden="true" class="gl-button-icon gl-icon s48"&gt;
+        &lt;use href="&lcub;&lcub; getIconsBundle &rcub;&rcub;#github"&gt;&lt;/use&gt;
+    &lt;/svg&gt;
+&lt;/td&gt;</pre>
+            </td>
+            <td><svg role="img" aria-hidden="true" class="gl-button-icon gl-icon s48">
+                <use href="{{ getIconsBundle }}#github"></use>
+            </svg></td>
+        </tr>
+        <tr><td><BR></td><td></td></tr>
+        <tr>
+            <td>Prerendered and injected into element attribute JSON object<BR>
+            <pre>&lt;td&gt;
+UserInfoJSON.username = &lt;span class="userinfo-json" data-param="name"&gt;&lt;/span&gt;
+UserInfoJSON.email = &lt;span class="userinfo-json" data-param="email"&gt;&lt;/span&gt;
+&lt;/td&gt;
+
+&lt;script&gt;
+let userinfo = document.getElementById("userinfo").getAttribute("data-userinfo");
+const UserInfoObject = JSON.parse(userinfo);
+
+function fillUserInfoFromJson() {
+    document.querySelectorAll('.userinfo-json').forEach(function (e) {
+        e.innerText = UserInfoObject[e.getAttribute("data-param")];
+    });
+}
+&lt;/script&gt;</pre>
+            </td>
+            <td>
+                UserInfoJSON.username = <span class="userinfo-json" data-param="name"></span><BR>
+                UserInfoJSON.email = <span class="userinfo-json" data-param="email"></span>
+            </td>
+        </tr>
+        <tr><td><BR></td><td></td></tr>
+        <tr>
+            <td>API online request to /api/v4/userinfo<BR>
+            <pre>&lt;td&gt;
+userinfo.name = &lt;span class="userinfo-api" data-param="name"&gt;&lt;/span&gt;
+userinfo.email = &lt;span class="userinfo-api" data-param="email"&gt;&lt;/span&gt;
+&lt;/td&gt;
+&lt;script&gt;
+    function loadApiUserInfo() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                let apiobj = JSON.parse(this.responseText)
+                document.querySelectorAll('.userinfo-api').forEach(function (e) {
+                    e.innerText = apiobj[e.getAttribute("data-param")];
+                });
+            }
+        };
+        xhttp.open("GET", "/api/v4/user", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+    }
+&lt;/script&gt;
+            </pre>
+            </td>
+            <td>
+                userinfo.name = <span class="userinfo-api" data-param="name"></span><BR>
+                userinfo.email = <span class="userinfo-api" data-param="email"></span>
+            </td>
+        </tr>
+        <tr><td><BR></td><td></td></tr>
+        <tr>
+            <td>Gitlab page gon object variable<BR>
+            <pre>&lt;td&gt;
+gon.current_user_fullname = &lt;span class="gonvariable" data-param="current_user_fullname"&gt;&lt;/span&gt;
+gon.version = &lt;span class="gonvariable" data-param="version"&gt;&lt;/span&gt;
+&lt;/td&gt;
+&lt;script&gt;
+function fillgonelements() {
+    document.querySelectorAll('.gonvariable').forEach(function (e) {
+        e.innerText = gon[e.getAttribute("data-param")];
+    });
+}
+&lt;/script&gt;
+            </pre>
+            </td>
+            <td>
+                gon.current_user_fullname = <span class="gonvariable" data-param="current_user_fullname"></span><BR>
+                gon.version = <span class="gonvariable" data-param="version"></span><BR>
+            </td>
+        </tr>
+        <tr><td><BR></td><td></td></tr>
+        <tr>
+            <td>Gitlab page gon.sprite_icons accessibility icon 32x32<BR>
+                <pre>&lt;td&gt;
+&lt;svg role="img" aria-hidden="true" class="gl-button-icon gl-icon s32"&gt;
+    &lt;use id="svglink" href=""&gt;&lt;/use&gt;
+&lt;/svg&gt;
+&lt;/td&gt;
+&lt;script&gt;
+function fillgonsvg() {
+    let svg = document.getElementById("svglink")
+    svg.setAttribute('href',this.gon.sprite_icons + "#accessibility");
+}
+&lt;/script&gt;
+            </pre>
+
+            </td>
+            <td><svg role="img" aria-hidden="true" class="gl-button-icon gl-icon s32">
+                <use id="svglink" href=""></use>
+            </svg></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    let userinfo = document.getElementById("userinfo").getAttribute("data-userinfo");
+    const userinfoobj = JSON.parse(userinfo);
+    function loadApiUserInfo() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                let apiobj = JSON.parse(this.responseText)
+                document.querySelectorAll('.userinfo-api').forEach(function (e) {
+                    e.innerText = apiobj[e.getAttribute("data-param")];
+                });
+            }
+        };
+        xhttp.open("GET", "/api/v4/user", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+    }
+
+    function fillUserInfoFromJson() {
+            document.querySelectorAll('.userinfo-json').forEach(function (e) {
+                e.innerText = userinfoobj[e.getAttribute("data-param")];
+            });
+    }
+    function fillSearchData() {
+        let searchParams = new URLSearchParams(window.location.search)
+        let searchField = document.getElementById("search_data");
+        searchField.value = localStorage.getItem("search_data");
+        if (!searchParams.has("search_data") && searchField.value.length > 0)
+        {
+            const params = new URLSearchParams({ "search_data": searchField.value })
+            document.location.href = window.location.href + `?${params}`;
+        }
+        searchField.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                submit_search_data();
+            }
+        });
+    }
+
+    function clear_search_data() {
+        document.getElementById("search_data").value = "";
+        localStorage.setItem("search_data", "");
+        submit_search_data();
+    }
+
+    function submit_search_data() {
+        let data=document.getElementById("search_data").value.toLowerCase();
+        let form="";
+        if (data.length === 0) {
+            console.log("Empty string. Reset URL.");
+            window.location.href=window.location.href.split('?')[0];
+        } else {
+            localStorage.setItem("search_data", data);
+            form = $('<form method="GET">');
+            form.append('<input name="search_data" value="' + data + '" />');
+            form.appendTo($('body')).submit();
+        }
+    }
+    function fillgonelements() {
+        document.querySelectorAll('.gonvariable').forEach(function (e) {
+            e.innerText = gon[e.getAttribute("data-param")];
+        });
+        let svg = document.getElementById("svglink")
+        svg.setAttribute('href',this.gon.sprite_icons + "#accessibility");
+    }
+    window.addEventListener("load", myInit, true); function myInit(){
+        fillSearchData();
+        fillUserInfoFromJson();
+        loadApiUserInfo();
+        fillgonelements();
+    }
+</script>
+

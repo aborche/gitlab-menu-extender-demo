@@ -1,0 +1,79 @@
+[
+  {
+    "avatar": null,
+    "entity_id": null,
+    "icon": "go-back",
+    "id": "back",
+    "link": "/",
+    "link_classes": null,
+    "pill_count": null,
+    "title": "Back to Gitlab"
+  },
+  {
+    "avatar": null,
+    "entity_id": null,
+    "icon": "information-o",
+    "id": "helper",
+    "link": "/-/helper/",
+    "link_classes": null,
+    "pill_count": null,
+    "title": "Deploy Information"
+  },
+  {
+    "avatar": null,
+    "entity_id": null,
+    "icon": "rocket-launch",
+    "id": "deploy",
+    "link": "/-/helper/deploy",
+    "link_classes": "show",
+    "pill_count": null,
+    "title": "Deploy Area (Alpha)",
+    "is_active": false,
+    "items": [
+      {
+        "avatar": null,
+        "entity_id": null,
+        "icon": "dash-circle",
+        "id": "dev",
+        "is_active": false,
+        "link": "/-/helper/deploy/to-development",
+        "link_classes": null,
+        "pill_count": 0,
+        "title": "Deploy to DEV"
+      },
+      {
+        "avatar": null,
+        "entity_id": null,
+        "icon": "check-circle-dashed",
+        "id": "test",
+        "is_active": false,
+        "link": "/-/helper/deploy/to-testing",
+        "link_classes": null,
+        "pill_count": null,
+        "title": "Deploy to TEST"
+      },
+      {
+        "avatar": null,
+        "entity_id": null,
+        "icon": "check-circle",
+        "id": "acc",
+        "is_active": false,
+        "link": "/-/helper/deploy/to-acceptance",
+        "link_classes": null,
+        "pill_count": null,
+        "title": "Deploy to ACC"
+      },
+      {
+        "avatar": null,
+        "entity_id": null,
+        "icon": "check-circle-filled",
+        "id": "prod",
+        "is_active": false,
+        "link": "/-/helper/deploy/to-production",
+        "link_classes": null,
+        "pill_count": null,
+        "title": "Deploy to PROD"
+      }
+    ]
+  }
+]
